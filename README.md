@@ -1,2 +1,7 @@
 # AdventOfCode2020
-Advent Of Code 2020  Pharo
+AdventOfCode2020
+Smalltalk solutions for the 2020 running of the Advent of Code [http://adventofcode.com]
+
+Coded using the https://pharo.org/ Smalltalk environment
+
+To load, in Pharo9 image do:
