@@ -41,6 +41,29 @@ ByteString >> day03b [
 ]
 
 { #category : #'*AdventOfCode2020' }
+ByteString >> day04WithPassport: aSymbol [ 
+	| validCount passport keyValue |
+	validCount := 0.
+	passport := nil.
+	self linesDo: [ :line | 
+		line isEmpty
+			ifTrue: [ 
+				(passport isValidPassport: aSymbol) ifTrue: [ 
+					validCount := validCount + 1 ].
+				passport := nil ]
+			ifFalse: [ 
+				passport ifNil: [ 
+					passport := Dictionary new.
+					passport at: 'cid' put: #default ].
+				(line splitOn: $ ) do: [ :field | 
+					keyValue := field splitOn: $:.
+					passport at: keyValue first put: keyValue last ] ] ].
+	(passport isValidPassport: aSymbol) ifTrue: [ 
+		validCount := validCount + 1 ].
+	^ validCount
+]
+
+{ #category : #'*AdventOfCode2020' }
 ByteString >> isAOCValidPassword [
 	| strings |
 	strings := self splitOn: [: char | char = $- or: [ char = $  ] ].
@@ -56,6 +79,48 @@ ByteString >> isAOCValidPassword2 [
 	char := strings third first.
 	^ (((password at: strings first asNumber)=char) asBit +
 			((password at: strings second asNumber)=char) asBit) = 1
+]
+
+{ #category : #'*AdventOfCode2020' }
+ByteString >> isValidBirthYear [
+	^ self asNumber between: 1920 and: 2002
+]
+
+{ #category : #'*AdventOfCode2020' }
+ByteString >> isValidExpirationYear [
+	^ self asNumber between: 2020 and: 2030
+]
+
+{ #category : #'*AdventOfCode2020' }
+ByteString >> isValidEyeColor [
+	^ #(amb blu brn gry grn hzl oth) includes: self
+]
+
+{ #category : #'*AdventOfCode2020' }
+ByteString >> isValidHairColor [
+	self size = 7 ifFalse: [ ^ false ].
+	(self beginsWith: '#') ifFalse: [ ^ false ].
+	self allButFirst do: [: char | ('0123456789abcdef' includes: char) ifFalse: [ ^ false ]].
+	^ true
+]
+
+{ #category : #'*AdventOfCode2020' }
+ByteString >> isValidHeight [
+	(self endsWith: 'cm') ifTrue: [(self asNumber between: 150 and: 193) ifTrue: [ ^ true ] ].
+	(self endsWith: 'in') ifTrue: [(self asNumber between: 59 and: 76) ifTrue: [ ^ true ]].
+	^ false
+]
+
+{ #category : #'*AdventOfCode2020' }
+ByteString >> isValidIssueYear [
+	^ self asNumber between: 2010 and: 2020
+]
+
+{ #category : #'*AdventOfCode2020' }
+ByteString >> isValidPassportID [
+	self size = 9 ifFalse: [ ^ false ].
+	self do: [: char | ('0123456789' includes: char) ifFalse: [ ^ false ]].
+	^ true
 ]
 
 { #category : #'*AdventOfCode2020' }
