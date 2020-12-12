@@ -64,6 +64,30 @@ ByteString >> day04WithPassport: aSymbol [
 ]
 
 { #category : #'*AdventOfCode2020' }
+ByteString >> day05a [
+	^ (self lines
+		collect: [ :line | 
+			(((('2r' , line trim replaceAll: $F with: $0) replaceAll: $B with: $1)
+				replaceAll: $L
+				with: $0) replaceAll: $R with: $1) asNumber  ]) max
+]
+
+{ #category : #'*AdventOfCode2020' }
+ByteString >> day05b [
+	| prev |
+	prev := -3.
+	^ (self lines
+		collect: [ :line | 
+			(((('2r' , line trim replaceAll: $F with: $0) replaceAll: $B with: $1)
+				replaceAll: $L
+				with: $0) replaceAll: $R with: $1) asNumber ]) asSortedCollection
+		do: [ :each | 
+			each - 2 = prev
+				ifTrue: [ ^ each - 1 ]
+				ifFalse: [ prev := each ] ]
+]
+
+{ #category : #'*AdventOfCode2020' }
 ByteString >> isAOCValidPassword [
 	| strings |
 	strings := self splitOn: [: char | char = $- or: [ char = $  ] ].
