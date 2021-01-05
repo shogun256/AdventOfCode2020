@@ -88,6 +88,52 @@ ByteString >> day05b [
 ]
 
 { #category : #'*AdventOfCode2020' }
+ByteString >> day06a [
+	| count currentGroupAnswers |
+	count := 0.
+	currentGroupAnswers := Set new.
+	
+	self lines
+		do: [ :line | 
+			line
+				ifEmpty: [ count := count + currentGroupAnswers size.
+					currentGroupAnswers := Set new.
+					 ]
+				ifNotEmpty: [ line do: [ :char | currentGroupAnswers add: char ] ] ].
+	count := count + currentGroupAnswers size.
+	
+	^ count
+]
+
+{ #category : #'*AdventOfCode2020' }
+ByteString >> day06b [
+	| count currentGroupAnswers countGroup count1 |
+	count := 0.
+	currentGroupAnswers := Bag new.
+	countGroup := 0.
+	count1 := 0.
+	self lines
+		do: [ :line | 
+			line
+				ifEmpty: [ currentGroupAnswers
+						associationsDo:  [ :each | 
+							each value = countGroup
+								ifTrue: [ count1 := count1 + 1 ] ].
+					count := count + count1.
+					count1 := 0.
+					currentGroupAnswers := Bag new.
+					countGroup := 0 ]
+				ifNotEmpty: [ line do: [ :char | currentGroupAnswers add: char ].
+					countGroup := countGroup + 1 ] ].
+	currentGroupAnswers
+		associationsDo: [ :each | 
+			each value = countGroup
+				ifTrue: [ count1 := count1 + 1 ] ].
+	count := count + count1.
+	^ count
+]
+
+{ #category : #'*AdventOfCode2020' }
 ByteString >> isAOCValidPassword [
 	| strings |
 	strings := self splitOn: [: char | char = $- or: [ char = $  ] ].
